@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>히크 렌즈가이드 도수렌즈 안경점 찾기</title>
+<meta name="description" content="히크 렌즈가이드 도수렌즈를 맞출 수 있는 전국 안경점을 지도에서 찾아보세요.">
+<meta name="theme-color" content="#FAF8F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1C1E" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="히크 렌즈가이드 도수렌즈 안경점 찾기">
+<meta property="og:description" content="우리 동네에서 도수렌즈를 맞출 수 있는 안경점을 확인하세요.">
+<link rel="preload" href="map/national.json" as="fetch" crossorigin>
+<link rel="preload" href="data/stores.json" as="fetch" crossorigin>
+<link rel="stylesheet" href="assets/font/pretendard.css">
+<link rel="stylesheet" href="assets/icons/regular.css">
+<link rel="stylesheet" href="app.css?v=9">
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="panel" id="panel" aria-label="안경점 찾기">
+    <header class="brand">
+      <a class="logo" href="https://smartstore.naver.com/moremetaglass" target="_blank" rel="noopener"><img src="assets/brand/logo.png" alt="HEEK 히크 렌즈가이드 연구소" width="96" height="26"></a>
+      <span class="brand-sub">렌즈가이드 안경점 찾기</span>
+    </header>
+
+    <section class="hero" id="hero">
+      <p class="hero-kicker">히크 렌즈가이드 도수렌즈</p>
+      <h1 class="hero-title">전국 <strong id="heroCount">-</strong>곳 안경점에서<br>맞출 수 있어요</h1>
+      <img class="hero-char" src="assets/brand/ttoryeot-wave.webp" alt="" width="84" height="103">
+    </section>
+
+    <div class="finder" id="finder">
+      <form class="search" id="searchForm" role="search" autocomplete="off">
+        <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+        <label class="sr-only" for="q">지역, 동네, 매장 이름 검색</label>
+        <input id="q" type="search" inputmode="search" placeholder="동네·주소 검색 (예: 수원 금곡동)" enterkeyhint="search">
+        <button type="button" class="search-clear" id="qClear" aria-label="검색어 지우기" hidden><i class="ph ph-x-circle"></i></button>
+      </form>
+      <button type="button" class="near" id="nearBtn"><i class="ph ph-crosshair"></i><span>내 주변</span></button>
+      <ul class="suggest" id="suggest" role="listbox" hidden></ul>
+    </div>
+
+    <div class="sheet" id="sheet">
+      <div class="sheet-grip" id="grip" aria-hidden="true"><span></span></div>
+      <nav class="crumbs" id="crumbs" aria-label="지역 경로"></nav>
+      <div class="sheet-head" id="sheetHead"></div>
+      <div class="sheet-body" id="sheetBody"></div>
+      <footer class="sheet-foot">
+        <a class="cta" href="https://smartstore.naver.com/moremetaglass" target="_blank" rel="noopener">렌즈가이드 보기<i class="ph ph-arrow-up-right"></i></a>
+      </footer>
+    </div>
+  </aside>
+
+  <main class="stage" id="stage" aria-label="안경점 지도">
+    <svg class="map" id="map" role="img" aria-label="대한민국 지도">
+      <g id="gSido"></g>
+      <g id="gSgg"></g>
+      <g id="gDong"></g>
+      <g id="gLines"></g>
+    </svg>
+    <div class="overlay" id="overlay"></div>
+    <div class="zoom" role="group" aria-label="지도 확대 축소">
+      <button type="button" id="zoomIn" aria-label="확대"><i class="ph ph-plus"></i></button>
+      <button type="button" id="zoomOut" aria-label="축소"><i class="ph ph-minus"></i></button>
+      <button type="button" id="zoomHome" aria-label="전국 보기"><i class="ph ph-arrows-out-simple"></i></button>
+    </div>
+    <p class="attrib">행정구역 경계: 통계청 SGIS(공공누리 제1유형), vuski/admdongkor (CC BY 4.0) · 매장 정보: 네이버 지도 검색 결과</p>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="pop" id="pop" hidden role="dialog" aria-label="매장 요약"></div>
+    <div class="loading" id="loading"><img src="assets/brand/ttoryeot-wave.webp" alt="" width="96" height="118"><span>지도를 불러오는 중이에요</span></div>
+  </main>
+</div>
+
+<template id="tplNotice">
+  <p class="notice">공개된 정보와 이용자 제보를 바탕으로, VR 렌즈 도수 제작 경험이 있는 것으로 알려진 안경점입니다. 안경사 변경, 렌즈 재고 등 매장 사정에 따라 제작이 어려울 수 있으며 제작을 보장하지는 않습니다.<span class="src">지도 경계: 통계청 SGIS(공공누리 제1유형), vuski/admdongkor(CC BY 4.0) · 매장 정보: 네이버 지도 검색 결과</span></p>
+</template>
+<script src="app.js?v=9" defer></script>
+</body>
+</html>
