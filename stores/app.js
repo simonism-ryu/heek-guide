@@ -96,6 +96,7 @@
     S.home = fit(all);
     S.minS = S.home.s * .75; S.maxS = Math.max(60, size().W / 1.2);
     S.view = { ...S.home };
+    lastW = size().W;
     applyView();
     route(true);
   }
@@ -465,7 +466,7 @@
         <a class="cta" href="${esc(st.url)}" target="_blank" rel="noopener">네이버 지도<i class="ph ph-arrow-up-right"></i></a>
         ${tel ? `<a class="cta ghost" href="tel:${tel}">전화하기</a>` : `<button class="cta ghost" data-copy="${esc(st.a)}">주소 복사</button>`}
       </div>
-      <div class="tip"><img class="tip-char" src="assets/brand/ttoryeot-happy.webp" alt="" width="44" height="40" loading="lazy"><div><b>방문 팁</b>전화로 묻기보다 렌즈가이드를 들고 가서 안경사님께 데모렌즈를 보여 주세요. 렌즈 재고가 있으면 30분 내외로 제작돼요. <a href="${CFG.guide}" target="_blank" rel="noopener">안경사용 안내 보기</a></div></div>
+      <div class="tip"><img class="tip-char" src="assets/brand/ttoryeot-happy.webp" alt="" width="44" height="40" loading="lazy"><div><b>방문 팁</b>렌즈가이드를 들고 가서 안경사님께 동봉된 데모렌즈를 보여 주세요. 제로는 퀘스트3(비전 프로)도 함께 가져가세요. 렌즈 재고가 있으면 30분 내외, 없으면 며칠 걸릴 수 있어요. <a href="${CFG.guide}" target="_blank" rel="noopener">안경사용 안내 보기</a></div></div>
       ${tplNotice}
       ${CFG.report ? `<a class="report" href="${CFG.report}${encodeURIComponent(st.id)}" target="_blank" rel="noopener"><i class="ph ph-flag"></i>정보가 다르거나 제작을 거절당했어요</a>` : ''}
     </div>`;
@@ -602,7 +603,8 @@
   /* ---------- 기타 ---------- */
   let tt = 0;
   function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2600); }
-  addEventListener('resize', () => { setSheet(); if (!S.nat || !size().W) return; S.maxS = Math.max(60, size().W / 1.2); if (!isFinite(S.view.s) || !isFinite(S.view.cx) || S.view.s <= 0) { S.home = fit(S.homeBB); S.minS = S.home.s * .75; S.view = { ...S.home }; } applyView(); });
+  let lastW = 0;
+  addEventListener('resize', () => { setSheet(); if (!S.nat || !size().W) return; if (!lastW) { lastW = size().W; S.home = fit(S.homeBB); S.minS = S.home.s * .75; S.maxS = Math.max(60, size().W / 1.2); route(); return; } lastW = size().W; S.maxS = Math.max(60, size().W / 1.2); if (!isFinite(S.view.s) || !isFinite(S.view.cx) || S.view.s <= 0) { S.home = fit(S.homeBB); S.minS = S.home.s * .75; S.view = { ...S.home }; } applyView(); });
   setSheet('peek');
   load().catch((err) => { console.error(err); $('#sheetHead').innerHTML = '<h2>지도를 불러오지 못했어요</h2><p>잠시 후 다시 열어 주세요.</p>'; });
 })();
